@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "5d5a8304-49ee-4787-ac87-3c6bd2d686cf"
+      }
+    },
+    "android": {
+      "package": "com.favnc.favtok"
+    }
+  }
+}

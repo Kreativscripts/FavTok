@@ -1,2 +1,6 @@
 .expo/
 node_modules/
+dist/
+build/
+*.apk
+*.aab

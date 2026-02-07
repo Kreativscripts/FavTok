@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet, View, TextInput, Text, ScrollView, Alert } fr
 import { DownloadButton, ClearButton } from './UI/buttons';
 import { FadeInView } from './UI/animations';
 import { LoadingSpinner } from './UI/loading';
-import { validateTikTokUrl } from './Script/function';
+import { isValidTikTokUrl } from './Script/function';
 import { initiateDownload } from './Script/download';
 
 export default function App() {
@@ -12,7 +12,7 @@ export default function App() {
   const [history, setHistory] = useState<string[]>([]);
 
   const handleDownload = async () => {
-    if (!validateTikTokUrl(url)) {
+    if (!isValidTikTokUrl(url)) {
       Alert.alert('Invalid URL', 'Please enter a valid TikTok video URL.');
       return;
     }
@@ -21,7 +21,7 @@ export default function App() {
     setLoading(false);
 
     if (result.success) {
-      Alert.alert('Success', `Video saved to: ${result.path}`);
+      Alert.alert('Success', 'Video downloaded successfully.');
       if (!history.includes(url)) {
         setHistory([url, ...history.slice(0, 4)]);
       }

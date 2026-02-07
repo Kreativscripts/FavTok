@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
-import { downloadTikTokVideo } from "./function";
+import { simulateApiCall } from "./function";
 
 interface DownloadResult {
   success: boolean;
@@ -9,47 +9,44 @@ interface DownloadResult {
   path?: string;
 }
 
-const sanitize = (value: string) =>
-  value
-    .replace(/[^\w\-]+/g, "_")
-    .replace(/_+/g, "_")
-    .slice(0, 60);
-
 export const initiateDownload = async (url: string): Promise<DownloadResult> => {
   try {
-    const { videoUrl } = await downloadTikTokVideo(url);
+    const { videoUrl, username } = await simulateApiCall(url);
 
-    const filename = `favtok_${Date.now()}.mp4`;
+    const filename = `favtok_${username}_${Date.now()}.mp4`;
 
     const baseDir = FileSystem.documentDirectory;
     if (!baseDir) {
-      return { success: false, message: "File system not available." };
+      return {
+        success: false,
+        message: "File system not available."
+      };
     }
 
-    const localUri = baseDir + filename;
+    const fileUri = baseDir + filename;
 
-    const result = await FileSystem.downloadAsync(videoUrl, localUri);
+    const result = await FileSystem.downloadAsync(videoUrl, fileUri);
 
+    // Open share/save menu (best Expo-compatible way)
     if (await Sharing.isAvailableAsync()) {
       await Sharing.shareAsync(result.uri, {
         mimeType: "video/mp4",
-        dialogTitle: "Save video",
-        UTI: "public.mpeg-4"
+        dialogTitle: "Save TikTok Video"
       });
-      return { success: true, message: "Downloaded. Choose where to save it.", path: result.uri };
     }
 
     return {
       success: true,
-      message: Platform.OS === "android" 
-        ? "Downloaded to app storage." 
-        : "Downloaded to app storage.",
+      message: "Download complete!",
       path: result.uri
     };
   } catch (error) {
     return {
       success: false,
-      message: error instanceof Error ? error.message : "Network or download error."
+      message:
+        error instanceof Error
+          ? error.message
+          : "An unknown download error occurred."
     };
   }
 };

@@ -3,7 +3,7 @@
     "extra": {
       "RAPIDAPI_KEY": "${RAPIDAPI_KEY}",
       "eas": {
-        "projectId": "5d5a8304-49ee-4787-ac87-3c6bd2d686cf"
+        "projectId": "28e4b4b6-6ccc-4cdc-99d7-328e1091c1cb"
       }
     },
     "android": {
